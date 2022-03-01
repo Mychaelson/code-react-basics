@@ -1,24 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import "./assets/style.css";
+import Navbar from "./components/Navbar/Navbar";
+import Band from "./components/Band/Band";
+import TourSection from "./components/TourSection/TourSection";
+import Jumbotron from "./components/Jumbotron/Jumbotron";
+import "bootstrap/dist/css/bootstrap.min.css";
+import {} from "reactstrap";
 
 function App() {
+  // hanya bisa return satu component atau tag pembungkus, klo perlu bnayak pembungkus bisa pake tag kosong, khusus react
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Navbar />
+      <Jumbotron />
+      <Band />
+      <TourSection />
+    </>
   );
 }
 
