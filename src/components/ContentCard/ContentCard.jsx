@@ -16,20 +16,22 @@ const likes = 1234;
 const caption =
   "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Saepe nesciunt dicta magni necessitatibus suscipit voluptas deserunt officiis aspernatur quibusdam veniam optio voluptate asperiores, ab qui accusantium facere quaerat? Placeat, doloremque itaque! Expedita iusto quis aliquam quisquam! Et ducimus, dignissimos possimus in quae ullam labore fugiat odio exercitationem impedit deserunt quasi commodi modi repellat iste, totam officia assumenda asperiores. Dolores illum molestiae excepturiquidem asperiores ex ipsum beatae dicta esse doloremque.";
 
-const ContentCard = () => {
+const ContentCard = (props) => {
   const likePost = (amount) => {
-    alert(`Liked Post ${amount}`);
+    // ini ngk bisa krna props sifatnya itu read only
+    props.likes++;
+    alert(`Liked Post ${props.likes}`);
   };
 
   return (
     <Card className="my-2">
       <CardBody>
         <CardTitle tag="h5" className="fw-bold">
-          {username}
+          {props.username}
         </CardTitle>
 
         <CardSubtitle tag="h6" className="text-muted mb-4">
-          {location}
+          {props.location}
         </CardSubtitle>
 
         <img
@@ -42,18 +44,20 @@ const ContentCard = () => {
         />
 
         <CardText tag="h6" className="fw-bold mt-3">
-          {likes.toLocaleString()} likes
+          {props.likes.toLocaleString()} likes
         </CardText>
 
         <CardText className="fs-5">
-          <span className="fw-bold">{username}</span> -{" "}
-          {caption.length > 140 ? caption.slice(0, 140) + " ..." : caption}
+          <span className="fw-bold">{props.username}</span> -{" "}
+          {props.caption.length > 140
+            ? props.caption.slice(0, 140) + " ..."
+            : props.caption}
         </CardText>
 
         <Button
           onClick={() => likePost(14)}
           color="danger"
-          // size="lg"
+          size="lg"
           className="d-flex-justify-content-center align-items-center"
         >
           Like &nbsp;
