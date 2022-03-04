@@ -25,7 +25,7 @@ const ToDoItem = (props) => {
             ) : (
               <Button
                 onClick={props.editStatus}
-                color="danger"
+                color="warning"
                 className="px-4"
               >
                 On Going

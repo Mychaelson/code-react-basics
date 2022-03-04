@@ -9,6 +9,7 @@ import ContentCard from "./components/ContentCard/ContentCard";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Input } from "reactstrap";
 import ToDoItem from "./components/ToDoItem/ToDoItem";
+import axios from "axios";
 
 const data = [
   {
@@ -70,50 +71,38 @@ function App() {
   const [toDoInputValue, setToDoInputValue] = useState("");
   const [date, setDate] = useState("");
   const [status, setStatus] = useState("");
-  const [toDoList, setToDoList] = useState([
-    {
-      date: new Date(2022, 2, 1),
-      action: "Makan",
-      status: true,
-    },
-    {
-      date: new Date(2022, 2, 2),
-      action: "Belajar Programming",
-      status: true,
-    },
-    {
-      date: new Date(2022, 2, 3),
-      action: "Tidur",
-      status: true,
-    },
-    {
-      date: new Date(2022, 2, 4),
-      action: "Jalan-Jalan",
-      status: false,
-    },
-    {
-      date: new Date(2022, 2, 5),
-      action: "Belajar Programming",
-      status: false,
-    },
-  ]);
+  const [toDoList, setToDoList] = useState([]);
+  // [
+  //   {
+  //     date: new Date(2022, 2, 1),
+  //     action: "Makan",
+  //     status: true,
+  //   },
+  //   {
+  //     date: new Date(2022, 2, 2),
+  //     action: "Belajar Programming",
+  //     status: true,
+  //   },
+  //   {
+  //     date: new Date(2022, 2, 3),
+  //     action: "Tidur",
+  //     status: true,
+  //   },
+  //   {
+  //     date: new Date(2022, 2, 4),
+  //     action: "Jalan-Jalan",
+  //     status: false,
+  //   },
+  //   {
+  //     date: new Date(2022, 2, 5),
+  //     action: "Belajar Programming",
+  //     status: false,
+  //   },
+  // ]
 
   const ChangeUsername = () => {
     setMyUserName("bill");
   };
-
-  const addToDoList = () => {
-    const newData = [...toDoList];
-    newData[newData.length] = {
-      date: new Date(date),
-      action: toDoInputValue,
-      status: Boolean(parseInt(status)),
-    };
-    console.log(typeof status);
-    setToDoList(newData);
-  };
-
-  // hanya bisa return satu component atau tag pembungkus, klo perlu bnayak pembungkus bisa pake tag kosong, khusus react
 
   const renderContentList = () => {
     // return data.map((val) => {
@@ -132,23 +121,47 @@ function App() {
           date={val.date}
           action={val.action}
           status={val.status}
-          deleteTodo={() => deleteData(idx)}
-          editStatus={() => editStatus(idx)}
+          deleteTodo={() => deleteData(val.id)}
+          editStatus={() => editStatus(val.id)}
         />
       );
     });
   };
 
-  const deleteData = (index) => {
-    const newArr = [...toDoList];
-    newArr.splice(index, 1);
-    setToDoList(newArr);
+  const addToDoList = () => {
+    const addNewData = {
+      date: new Date(date),
+      action: toDoInputValue,
+      status: Boolean(parseInt(status)),
+    };
+    axios.post("http://localhost:2000/todos", addNewData).then(() => {
+      fetchToDoList();
+    });
   };
 
-  const editStatus = (index) => {
-    const newArr = [...toDoList];
-    newArr[index].status = !newArr[index].status;
-    setToDoList(newArr);
+  // hanya bisa return satu component atau tag pembungkus, klo perlu bnayak pembungkus bisa pake tag kosong, khusus react
+
+  const deleteData = (id) => {
+    axios.delete(`http://localhost:2000/todos/${id}`).then(() => {
+      fetchToDoList();
+    });
+  };
+
+  const editStatus = (id) => {
+    const dataToFind = toDoList.find((val) => {
+      return val.id === id;
+    });
+
+    // axios.get(`http://localhost:2000/todos/${id}`).then((res) => {
+    //   const newStatusValue = !res.data.status;
+    axios
+      .patch(`http://localhost:2000/todos/${id}`, {
+        status: !dataToFind.status,
+      })
+      .then(() => {
+        fetchToDoList();
+      });
+    // });
   };
 
   // -------- TODO -----------
@@ -173,6 +186,14 @@ function App() {
     console.log(value);
   };
 
+  const fetchToDoList = () => {
+    axios.get("http://localhost:2000/todos").then((res) => {
+      setToDoList(res.data);
+    });
+
+    console.log("Request");
+  };
+
   return (
     <>
       {/* <Navbar /> */}
@@ -187,9 +208,12 @@ function App() {
               <option value={0}>On Going</option>
             </Input>
           </div>
-          <div className="col-2">
+          <div className="col-2 d-flex flex-column">
             <Button onClick={addToDoList} color="success">
               Add
+            </Button>
+            <Button onClick={fetchToDoList} color="info">
+              Fetch ToDo
             </Button>
           </div>
         </div>

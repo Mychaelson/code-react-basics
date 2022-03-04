@@ -1,0 +1,22 @@
+{
+  "todos": [
+    {
+      "date": "2022-03-04T00:00:00.000Z",
+      "action": "tidur",
+      "status": true,
+      "id": 1
+    },
+    {
+      "date": "2022-03-04T00:00:00.000Z",
+      "action": "belajar",
+      "status": true,
+      "id": 2
+    },
+    {
+      "date": "2022-03-04T00:00:00.000Z",
+      "action": "ngantuk",
+      "status": true,
+      "id": 4
+    }
+  ]
+}
